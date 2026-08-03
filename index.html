@@ -32,9 +32,16 @@
           <section class="filter-card filter-card-search">
             <div class="field">
               <label for="itemName">Tên vật phẩm</label>
+
               <div class="search-wrapper">
                 <span class="search-icon" aria-hidden="true">🔍</span>
-                <input id="itemName" type="search" placeholder="Nhập tên vật phẩm..." autocomplete="off">
+
+                <input
+                  id="itemName"
+                  type="search"
+                  placeholder="Nhập tên vật phẩm..."
+                  autocomplete="off"
+                >
               </div>
             </div>
           </section>
@@ -42,69 +49,141 @@
           <section class="filter-card filter-card-options">
             <div class="field">
               <label for="basicStat">Chỉ số cơ bản</label>
+
               <div class="select-wrapper">
                 <span class="select-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path d="M4 19V9"></path><path d="M10 19V5"></path><path d="M16 19v-7"></path><path d="M22 19V3"></path></svg>
+                  <svg viewBox="0 0 24 24">
+                    <path d="M4 19V9"></path>
+                    <path d="M10 19V5"></path>
+                    <path d="M16 19v-7"></path>
+                    <path d="M22 19V3"></path>
+                  </svg>
                 </span>
+
                 <select id="basicStat"></select>
               </div>
             </div>
 
             <div class="field">
               <label for="upgrade">Số lần nâng cấp</label>
+
               <div class="select-wrapper">
                 <span class="select-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 4-4 4 4"></path><path d="M12 8v8"></path></svg>
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <path d="m8 12 4-4 4 4"></path>
+                    <path d="M12 8v8"></path>
+                  </svg>
                 </span>
+
                 <select id="upgrade"></select>
               </div>
             </div>
 
             <div class="field">
               <label for="category">Phân loại</label>
+
               <div class="select-wrapper">
                 <span class="select-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
+                  <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                    <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                    <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+                    <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                  </svg>
                 </span>
+
                 <select id="category"></select>
               </div>
             </div>
 
             <div class="field">
               <label for="job">Job</label>
+
               <div class="select-wrapper">
                 <span class="select-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M4 21a8 8 0 0 1 16 0"></path>
+                  </svg>
                 </span>
+
                 <select id="job"></select>
               </div>
             </div>
 
             <div class="field">
               <label for="machine">Máy xổ số</label>
+
               <div class="select-wrapper">
                 <span class="select-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"></rect><circle cx="8" cy="8" r="1"></circle><circle cx="16" cy="8" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="8" cy="16" r="1"></circle><circle cx="16" cy="16" r="1"></circle></svg>
+                  <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="18" height="18" rx="4"></rect>
+                    <circle cx="8" cy="8" r="1"></circle>
+                    <circle cx="16" cy="8" r="1"></circle>
+                    <circle cx="12" cy="12" r="1"></circle>
+                    <circle cx="8" cy="16" r="1"></circle>
+                    <circle cx="16" cy="16" r="1"></circle>
+                  </svg>
                 </span>
+
                 <select id="machine"></select>
               </div>
             </div>
           </section>
 
-          <section class="sidebar-action-card">
-            <button id="resetButton" class="action-button button-reset" type="button">
-              <span class="reset-symbol" aria-hidden="true">↻</span>
-              <span>Reset</span>
-            </button>
-          </section>
+          <div class="sidebar-reset-block">
+            <div class="actions">
+              <button
+                id="resetButton"
+                class="action-button button-reset"
+                type="button"
+              >
+                <span class="reset-symbol" aria-hidden="true">↻</span>
+                <span>Reset</span>
+              </button>
+            </div>
+          </div>
 
-          <section class="sidebar-quick-card">
+          <section class="sidebar-quick-card quick-filter">
             <h2 class="quick-filter-title">Tìm nhanh</h2>
+
             <div class="quick-group">
-              <button class="quick-chip" type="button" data-filter-type="stat" data-filter-value="+ATT">+ATT</button>
-              <button class="quick-chip" type="button" data-filter-type="stat" data-filter-value="+M.ATT">+M.ATT</button>
-              <button class="quick-chip quick-chip-name" type="button" data-filter-type="item-name" data-filter-value="tấn công vật lý">Vật lý</button>
-              <button class="quick-chip quick-chip-name" type="button" data-filter-type="item-name" data-filter-value="tấn công pháp thuật">Pháp thuật</button>
+              <button
+                class="quick-chip"
+                type="button"
+                data-filter-type="stat"
+                data-filter-value="+ATT"
+              >
+                +ATT
+              </button>
+
+              <button
+                class="quick-chip"
+                type="button"
+                data-filter-type="stat"
+                data-filter-value="+M.ATT"
+              >
+                +M.ATT
+              </button>
+
+              <button
+                class="quick-chip quick-chip-name"
+                type="button"
+                data-filter-type="item-name"
+                data-filter-value="tấn công vật lý"
+              >
+                Vật lý
+              </button>
+
+              <button
+                class="quick-chip quick-chip-name"
+                type="button"
+                data-filter-type="item-name"
+                data-filter-value="tấn công pháp thuật"
+              >
+                Pháp thuật
+              </button>
             </div>
           </section>
         </div>
