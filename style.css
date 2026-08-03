@@ -1980,3 +1980,154 @@ body::-webkit-scrollbar {
     padding-bottom: 8px !important;
   }
 }
+
+/* =========================================================
+   FINAL SIDEBAR — 8 CARD RIÊNG, KHOẢNG CÁCH ĐỀU
+   ========================================================= */
+
+@media (min-width: 901px) {
+  .sidebar,
+  .sidebar-body {
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  .sidebar-body {
+    display: grid !important;
+    grid-template-rows: repeat(6, auto) auto auto !important;
+    align-content: start !important;
+    gap: 8px !important;
+    overflow: hidden !important;
+  }
+
+  .filter-card,
+  .sidebar-action-card,
+  .sidebar-quick-card {
+    flex: none !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 14px !important;
+    background: rgba(251, 254, 252, 0.95) !important;
+    box-shadow:
+      0 7px 20px rgba(31, 41, 55, 0.045),
+      0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
+  }
+
+  .filter-card {
+    padding: 8px 10px !important;
+  }
+
+  /* Hai card đầu thêm khoảng thở phía trên rất nhẹ */
+  .filter-card-search,
+  .filter-card-option:first-of-type {
+    padding-top: 10px !important;
+  }
+
+  .filter-card-search {
+    background: rgba(255, 253, 246, 0.94) !important;
+  }
+
+  .filter-card-option {
+    background: rgba(249, 254, 252, 0.96) !important;
+  }
+
+  .filter-card .field,
+  .filter-card .field:last-child {
+    margin: 0 !important;
+  }
+
+  .filter-card .field label {
+    margin-bottom: 5px !important;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+  }
+
+  .filter-card .field input,
+  .filter-card .field select {
+    height: 27px !important;
+    min-height: 27px !important;
+    border-radius: 8px !important;
+    font-size: 10px !important;
+  }
+
+  .filter-card .select-icon {
+    left: 9px !important;
+    width: 11px !important;
+    height: 11px !important;
+  }
+
+  .filter-card .select-wrapper::after {
+    right: 13px !important;
+    width: 5px !important;
+    height: 5px !important;
+    border-right-width: 1.25px !important;
+    border-bottom-width: 1.25px !important;
+  }
+
+  .sidebar-action-card {
+    padding: 8px 10px !important;
+  }
+
+  .sidebar-action-card .action-button {
+    min-height: 30px !important;
+    border-radius: 8px !important;
+    font-size: 9.5px !important;
+  }
+
+  .sidebar-quick-card {
+    padding: 8px 10px 9px !important;
+  }
+
+  .sidebar-quick-card .quick-filter-title {
+    margin: 0 0 6px !important;
+    font-size: 9.5px !important;
+  }
+
+  .sidebar-quick-card .quick-group {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+  }
+
+  .sidebar-quick-card .quick-chip,
+  .sidebar-quick-card .quick-chip-name {
+    min-height: 20px !important;
+    padding: 2px 5px !important;
+    font-size: 8.5px !important;
+    line-height: 1 !important;
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 901px) {
+  .sidebar-body {
+    gap: 7px !important;
+  }
+
+  .filter-card,
+  .sidebar-action-card,
+  .sidebar-quick-card {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+  }
+
+  .filter-card {
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+  }
+
+  .filter-card-search,
+  .filter-card-option:first-of-type {
+    padding-top: 9px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .sidebar-action-card,
+  .sidebar-quick-card {
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: rgba(251, 254, 252, 0.95);
+  }
+}
