@@ -1951,3 +1951,61 @@ body::-webkit-scrollbar {
     margin-bottom: 8px;
   }
 }
+
+/* =========================================================
+   FIX CUỐI — SIDEBAR CAO BẰNG KHU VỰC KẾT QUẢ
+   Giữ 4 khối riêng, khoảng cách đều, không tạo thanh cuộn bên trái.
+   ========================================================= */
+
+@media (min-width: 901px) {
+  /* Hai cột luôn kéo dài bằng toàn bộ chiều cao còn lại của trang */
+  .layout {
+    align-items: stretch !important;
+  }
+
+  .sidebar,
+  .content {
+    height: 100% !important;
+    min-height: 0 !important;
+    align-self: stretch !important;
+  }
+
+  /* Cụm bên trái sử dụng toàn bộ chiều cao của cột */
+  .sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  .sidebar-body {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    gap: 8px !important;
+    overflow: hidden !important;
+  }
+
+  /* Khối tên vật phẩm, Reset và Tìm nhanh giữ nguyên kích thước */
+  .filter-card-search,
+  .sidebar-reset-block,
+  .sidebar-quick-card {
+    flex: 0 0 auto !important;
+  }
+
+  /* Khối các bộ lọc giãn ra để đáy sidebar bằng đáy bảng kết quả */
+  .filter-card-options {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+    justify-content: space-evenly !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .filter-card-options .field {
+    flex: 0 0 auto !important;
+  }
+}
