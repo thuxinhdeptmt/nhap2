@@ -1393,3 +1393,318 @@ body::-webkit-scrollbar {
     overflow-y: visible;
   }
 }
+
+/* =========================================================
+   POLISH — THANH CUỘN BẢNG MẢNH, BO TRÒN VÀ ĐỒNG BỘ GIAO DIỆN
+   ========================================================= */
+
+.table-scroll {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #8fc3ae rgba(234, 246, 240, 0.55);
+}
+
+.table-scroll::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+  margin-block: 7px;
+  border-radius: 999px;
+  background: rgba(234, 246, 240, 0.62);
+  box-shadow: inset 0 0 0 1px rgba(216, 231, 223, 0.72);
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  min-height: 52px;
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, #9fd1bd 0%, #72b99d 100%) padding-box;
+  box-shadow:
+    inset 0 0 0 1px rgba(47, 143, 111, 0.16),
+    0 1px 3px rgba(47, 143, 111, 0.12);
+}
+
+.table-scroll::-webkit-scrollbar-thumb:hover {
+  border-width: 2px;
+  background:
+    linear-gradient(180deg, #86c9ae 0%, #55a989 100%) padding-box;
+  box-shadow:
+    inset 0 0 0 1px rgba(47, 143, 111, 0.2),
+    0 2px 5px rgba(47, 143, 111, 0.18);
+}
+
+.table-scroll::-webkit-scrollbar-thumb:active {
+  background:
+    linear-gradient(180deg, #6fbea0 0%, #3f9676 100%) padding-box;
+}
+
+.table-scroll::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.table-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+@media (max-width: 620px) {
+  .table-scroll::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .table-scroll::-webkit-scrollbar-thumb {
+    border-width: 2px;
+  }
+}
+
+/* =========================================================
+   TINH CHỈNH — THU GỌN NHẸ CỤM BỘ LỌC ĐỂ KHÔNG BỊ SÁT VIỀN
+   ========================================================= */
+
+/* Chừa khoảng thở rõ hơn ở đáy card chọn bộ lọc */
+.filter-card-options {
+  padding: 9px 10px 12px;
+}
+
+/* Các dòng trong card gọn hơn một chút */
+.filter-card-options .field {
+  margin-bottom: 6px;
+}
+
+.filter-card-options .field:last-child {
+  margin-bottom: 0;
+}
+
+.filter-card-options .field label {
+  margin-bottom: 3px;
+  font-size: 10.5px;
+  line-height: 1.2;
+}
+
+/* Thu nhẹ chiều cao ô chọn và icon bên trong */
+.filter-card-options .field select {
+  height: 28px;
+  border-radius: 8px;
+  font-size: 10.5px;
+}
+
+.filter-card-options .select-icon {
+  left: 9px;
+  width: 13px;
+  height: 13px;
+}
+
+/* Khi đã chọn giá trị, chữ vẫn có khoảng đệm cân đối */
+.filter-card-options .select-wrapper.has-value select {
+  padding-left: 8px;
+}
+
+@media (max-width: 1200px) {
+  .filter-card-options {
+    padding: 8px 9px 10px;
+  }
+
+  .filter-card-options .field {
+    margin-bottom: 5px;
+  }
+
+  .filter-card-options .field select {
+    height: 27px;
+    font-size: 10px;
+  }
+
+  .filter-card-options .field label {
+    font-size: 10px;
+  }
+}
+
+/* =========================================================
+   FIX MẠNH — CHỪA KHOẢNG THỞ DƯỚI CỤM BỘ LỌC
+   Đặt cuối file để không bị các rule phía trên ghi đè
+   ========================================================= */
+.filter-card.filter-card-options {
+  padding: 10px 10px 18px !important;
+}
+
+.filter-card.filter-card-options .field {
+  margin-bottom: 7px !important;
+}
+
+.filter-card.filter-card-options .field:last-child {
+  margin-bottom: 0 !important;
+}
+
+.filter-card.filter-card-options .field select {
+  height: 27px !important;
+  font-size: 10px !important;
+}
+
+.filter-card.filter-card-options .select-icon {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+@media (max-width: 1200px) {
+  .filter-card.filter-card-options {
+    padding-bottom: 16px !important;
+  }
+}
+
+/* =========================================================
+   SIDEBAR POLISH — ĐỒNG BỘ TOÀN BỘ THANH BỘ LỌC
+   ========================================================= */
+
+/* Tất cả card bên trái dùng cùng khoảng đệm và bán kính */
+.filter-card,
+.sidebar-footer-card,
+.filter-card.filter-card-options {
+  padding: 10px 11px !important;
+  border-radius: 14px;
+}
+
+/* Khoảng cách các nhóm trong card bộ lọc đồng đều */
+.filter-card-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-card-options .field,
+.filter-card-search .field {
+  margin: 0 !important;
+}
+
+/* Label đồng đều trên toàn sidebar */
+.filter-card .field label {
+  margin: 0 0 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Tất cả ô nhập/chọn cùng kích thước */
+.filter-card .field input,
+.filter-card .field select {
+  width: 100%;
+  height: 30px !important;
+  min-height: 30px;
+  border-radius: 9px;
+  font-size: 10.5px !important;
+  line-height: 1;
+}
+
+/* Ô tìm kiếm cân lại icon và khoảng đệm */
+.filter-card-search .search-icon {
+  left: 10px;
+  font-size: 11px;
+}
+
+.filter-card-search .search-wrapper input {
+  padding: 0 10px 0 29px;
+}
+
+/* Bỏ mũi tên select mặc định vốn dày và sát mép */
+.filter-card-options select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none !important;
+  padding: 0 32px 0 30px !important;
+}
+
+/* Mũi tên mới: nhỏ, mảnh, lùi khỏi mép phải */
+.filter-card-options .select-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  z-index: 2;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid #526b60;
+  border-bottom: 1.5px solid #526b60;
+  transform: translateY(-66%) rotate(45deg);
+  pointer-events: none;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.filter-card-options .select-wrapper:focus-within::after {
+  border-color: var(--primary-strong);
+  transform: translateY(-35%) rotate(225deg);
+}
+
+/* Icon trái của các ô chọn cùng một kích thước và vị trí */
+.filter-card-options .select-icon,
+.filter-card.filter-card-options .select-icon {
+  left: 10px !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+
+/* Khi có giá trị, icon trái biến mất nhưng chữ vẫn không sát viền */
+.filter-card-options .select-wrapper.has-value select,
+.filter-card.filter-card-options .select-wrapper.has-value select {
+  padding-left: 10px !important;
+}
+
+/* Nút reset và nhóm tìm nhanh cân với các ô phía trên */
+.sidebar-footer-card .action-button {
+  min-height: 32px;
+  border-radius: 9px;
+}
+
+.sidebar-footer-card .quick-filter {
+  margin-top: 10px;
+  padding-top: 9px;
+}
+
+.sidebar-footer-card .quick-filter-title {
+  margin-bottom: 7px;
+  font-size: 10px;
+}
+
+.sidebar-footer-card .quick-group {
+  gap: 6px;
+}
+
+.sidebar-footer-card .quick-chip,
+.sidebar-footer-card .quick-chip-name {
+  min-height: 22px;
+  padding: 3px 6px;
+  font-size: 9px;
+}
+
+/* Khoảng cách giữa các card trong toàn sidebar */
+.sidebar-body {
+  gap: 9px;
+}
+
+@media (max-width: 1200px) {
+  .filter-card,
+  .sidebar-footer-card,
+  .filter-card.filter-card-options {
+    padding: 9px 10px !important;
+  }
+
+  .filter-card-options {
+    gap: 7px;
+  }
+
+  .filter-card .field input,
+  .filter-card .field select {
+    height: 29px !important;
+    min-height: 29px;
+    font-size: 10px !important;
+  }
+
+  .filter-card-options .select-wrapper::after {
+    right: 11px;
+  }
+}
