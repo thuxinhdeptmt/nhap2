@@ -1863,3 +1863,44 @@ body::-webkit-scrollbar {
     flex: 0 0 auto !important;
   }
 }
+
+/* =========================================================
+   CÂN LẠI NHỊP SIDEBAR — KHOẢNG CÁCH ĐỀU, KHÔNG ĐẨY RESET XUỐNG ĐÁY
+   ========================================================= */
+
+@media (min-width: 901px) {
+  .sidebar-body {
+    justify-content: flex-start !important;
+    gap: 10px !important;
+  }
+
+  /* Bỏ khoảng trắng lớn trước card Reset */
+  .sidebar-footer-card {
+    margin-top: 0 !important;
+  }
+
+  /* Tăng nhẹ khoảng thở phía trên hai card đầu,
+     nhưng giữ nguyên kích thước các ô nhập/chọn */
+  .filter-card-search,
+  .filter-card-options {
+    padding-top: 10px !important;
+  }
+
+  /* Giữ khoảng dưới cân với khoảng giữa các card */
+  .filter-card-search,
+  .filter-card-options,
+  .sidebar-footer-card {
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 901px) {
+  .sidebar-body {
+    gap: 8px !important;
+  }
+
+  .filter-card-search,
+  .filter-card-options {
+    padding-top: 9px !important;
+  }
+}
