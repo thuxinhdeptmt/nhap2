@@ -1834,3 +1834,32 @@ body::-webkit-scrollbar {
     min-height: 19px !important;
   }
 }
+
+/* =========================================================
+   CĂN ĐÁY SIDEBAR BẰNG BẢNG KẾT QUẢ
+   Giữ nguyên kích thước nội dung, không kéo giãn và không cuộn sidebar
+   ========================================================= */
+
+@media (min-width: 901px) {
+  .sidebar,
+  .sidebar-body {
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  .sidebar-body {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Đẩy riêng card Reset + Tìm nhanh xuống đáy.
+     Các ô lọc phía trên vẫn giữ nguyên chiều cao hiện tại. */
+  .sidebar-footer-card {
+    margin-top: auto !important;
+    flex: 0 0 auto !important;
+  }
+
+  .filter-card {
+    flex: 0 0 auto !important;
+  }
+}
