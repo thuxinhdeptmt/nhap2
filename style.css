@@ -2131,3 +2131,106 @@ body::-webkit-scrollbar {
     background: rgba(251, 254, 252, 0.95);
   }
 }
+
+/* =========================================================
+   SIDEBAR 4 KHỐI — KHOẢNG CÁCH ĐỀU, RESET KHÔNG CARD BỌC
+   ========================================================= */
+
+@media (min-width: 901px) {
+  .sidebar-body {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-content: initial !important;
+    gap: 9px !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* 4 khối đều cách nhau bằng gap của sidebar-body */
+  .filter-card,
+  .sidebar-action-card,
+  .sidebar-quick-card {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+  }
+
+  /* Tên vật phẩm: hạ nội dung xuống rất nhẹ */
+  .filter-card-search {
+    padding: 11px 10px 9px !important;
+  }
+
+  /* Toàn bộ các chỉ số nằm chung trong một card */
+  .filter-card-options {
+    padding: 11px 10px 10px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 14px !important;
+    background: rgba(249, 254, 252, 0.96) !important;
+    box-shadow:
+      0 7px 20px rgba(31, 41, 55, 0.045),
+      0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
+  }
+
+  .filter-card-options .field {
+    margin: 0 0 8px !important;
+  }
+
+  .filter-card-options .field:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .filter-card-search .field label,
+  .filter-card-options .field label {
+    margin-bottom: 5px !important;
+  }
+
+  /* Reset đứng riêng: không viền, không nền, không shadow bọc ngoài */
+  .sidebar-action-card {
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .sidebar-action-card .action-button {
+    width: 100% !important;
+    min-height: 31px !important;
+    margin: 0 !important;
+  }
+
+  /* Tìm nhanh là card riêng */
+  .sidebar-quick-card {
+    padding: 9px 10px 10px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 14px !important;
+    background: rgba(251, 254, 252, 0.95) !important;
+    box-shadow:
+      0 7px 20px rgba(31, 41, 55, 0.045),
+      0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 901px) {
+  .sidebar-body {
+    gap: 8px !important;
+  }
+
+  .filter-card-search,
+  .filter-card-options {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+  }
+
+  .filter-card-search {
+    padding-top: 10px !important;
+  }
+
+  .filter-card-options {
+    padding-top: 10px !important;
+  }
+
+  .filter-card-options .field {
+    margin-bottom: 7px !important;
+  }
+}
