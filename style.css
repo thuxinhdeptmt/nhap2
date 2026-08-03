@@ -1904,3 +1904,79 @@ body::-webkit-scrollbar {
     padding-top: 9px !important;
   }
 }
+
+/* =========================================================
+   FIX NHỊP SIDEBAR — HAI BÊN BẰNG CHIỀU CAO, KHOẢNG CÁCH ĐỀU
+   Không kéo giãn ô nhập, không tạo khoảng trống lớn trước Reset
+   ========================================================= */
+
+@media (min-width: 901px) {
+  .sidebar,
+  .sidebar-body {
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  .sidebar-body {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+  }
+
+  /* Card tìm kiếm và card dưới giữ nguyên kích thước */
+  .filter-card-search,
+  .sidebar-footer-card {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+  }
+
+  /* Khối bộ lọc nhận phần chiều cao còn lại để đáy sidebar
+     ngang với đáy bảng, nhưng không làm các ô select cao lên */
+  .filter-card-options {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    gap: 0 !important;
+
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+
+  /* Các mục trong khối bộ lọc có khoảng cách bằng nhau */
+  .filter-card-options .field {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+  }
+
+  /* Card tên vật phẩm có thêm một chút khoảng thở phía trên */
+  .filter-card-search {
+    padding-top: 11px !important;
+    padding-bottom: 9px !important;
+  }
+
+  /* Không đẩy riêng Reset xuống đáy bằng margin tự động */
+  .sidebar-footer-card {
+    margin-top: 0 !important;
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 901px) {
+  .sidebar-body {
+    gap: 8px !important;
+  }
+
+  .filter-card-options {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  .filter-card-search {
+    padding-top: 10px !important;
+    padding-bottom: 8px !important;
+  }
+}
