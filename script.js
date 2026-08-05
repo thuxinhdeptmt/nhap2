@@ -2,6 +2,7 @@ const CSV_URL = './data.csv';
 
 let allRows = [];
 let typingTimer = null;
+let searchingDotsTimer = null;
 let selectedQuickStat = '';
 
 const MACHINE_COLORS = {
@@ -45,10 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function attachEvents() {
-  elements.resetButton.addEventListener('click', loadData);
+  elements.resetButton.addEventListener('click', () => {
+    resetFilters();
+  });
 
   elements.itemName.addEventListener('input', () => {
     clearTimeout(typingTimer);
+    startSearchingStatus();
 
     typingTimer = setTimeout(() => {
       syncQuickChips();
@@ -276,6 +280,43 @@ function syncSelectIcons() {
   });
 }
 
+function startSearchingStatus() {
+  stopSearchingStatus();
+
+  let dotCount = 1;
+  elements.status.textContent = 'Đang tìm.';
+
+  searchingDotsTimer = setInterval(() => {
+    dotCount = dotCount % 3 + 1;
+    elements.status.textContent = `Đang tìm${'.'.repeat(dotCount)}`;
+  }, 280);
+}
+
+function stopSearchingStatus() {
+  if (searchingDotsTimer !== null) {
+    clearInterval(searchingDotsTimer);
+    searchingDotsTimer = null;
+  }
+}
+
+function hasActiveFilters() {
+  return (
+    String(elements.itemName.value ?? '').trim() !== '' ||
+    String(elements.basicStat.value ?? '').trim() !== '' ||
+    String(elements.upgrade.value ?? '').trim() !== '' ||
+    String(elements.category.value ?? '').trim() !== '' ||
+    String(elements.job.value ?? '').trim() !== '' ||
+    String(elements.machine.value ?? '').trim() !== '' ||
+    selectedQuickStat !== ''
+  );
+}
+
+function scrollTableToTop() {
+  if (!elements.tableScroll) return;
+
+  elements.tableScroll.scrollTop = 0;
+}
+
 function filterAndRender() {
   const filters = {
     itemName: normalize(elements.itemName.value),
@@ -298,7 +339,8 @@ function filterAndRender() {
 
   const groupedRows = groupDuplicateItems(filteredRows);
 
-  renderRows(groupedRows);
+  stopSearchingStatus();
+  renderRows(groupedRows, hasActiveFilters());
 }
 
 function quickStatMatch(sourceValue, quickStat) {
@@ -368,17 +410,20 @@ function groupDuplicateItems(rows) {
   ]);
 }
 
-function renderRows(rows) {
+function renderRows(rows, filtersAreActive = false) {
+  scrollTableToTop();
   elements.resultBody.innerHTML = '';
 
-  elements.status.textContent =
-    `${formatNumber(rows.length)} kết quả`;
-
   if (rows.length === 0) {
-    showMessage('Không có dữ liệu phù hợp');
+    elements.status.textContent = 'Không có kết quả';
+    showMessage('Không có kết quả');
     updateTableHeightMode();
     return;
   }
+
+  elements.status.textContent = filtersAreActive
+    ? `✓ ${formatNumber(rows.length)} kết quả`
+    : `${formatNumber(rows.length)} kết quả`;
 
   const fragment = document.createDocumentFragment();
 
@@ -488,6 +533,7 @@ function getMachineColor(machine) {
 
 function resetFilters(renderAfterReset = true) {
   clearTimeout(typingTimer);
+  stopSearchingStatus();
 
   elements.itemName.value = '';
   elements.basicStat.value = '';
@@ -507,6 +553,7 @@ function resetFilters(renderAfterReset = true) {
 }
 
 function showMessage(message) {
+  scrollTableToTop();
   elements.resultBody.innerHTML = '';
 
   const row = document.createElement('tr');
