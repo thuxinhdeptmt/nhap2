@@ -5,7 +5,7 @@ let typingTimer = null;
 let selectedQuickStat = '';
 let searchRequestId = 0;
 
-const MIN_SEARCH_FEEDBACK_MS = 360;
+const SEARCH_SETTLE_MS = 240;
 
 const MACHINE_COLORS = {
   'thi tran xanh': '#2F9E44',
@@ -37,7 +37,6 @@ const elements = {
   content: document.querySelector('.content'),
   tableCard: document.querySelector('.table-card'),
   tableScroll: document.querySelector('.table-scroll'),
-  searchProgress: document.getElementById('searchProgress'),
 
   quickChips: [...document.querySelectorAll('.quick-chip')]
 };
@@ -55,13 +54,12 @@ function attachEvents() {
     clearTimeout(typingTimer);
     searchRequestId++;
 
-    elements.status.textContent = 'Đang tìm...';
-    setSearchProgress(true);
-
+    // Giữ nguyên bảng trong lúc người dùng còn đang gõ.
+    // Chỉ tìm sau khi đã dừng tay một nhịp ngắn để tránh nhấp nháy.
     typingTimer = setTimeout(() => {
       syncQuickChips();
       filterWithFeedback();
-    }, 180);
+    }, 260);
   });
 
   [
@@ -91,7 +89,6 @@ function attachEvents() {
 
 async function loadData() {
   searchRequestId++;
-  setSearchProgress(false);
   showMessage('Đang tải dữ liệu...');
   elements.status.textContent = 'Đang tải dữ liệu...';
 
@@ -288,31 +285,21 @@ function syncSelectIcons() {
 
 async function filterWithFeedback() {
   const requestId = ++searchRequestId;
-  const startedAt = performance.now();
 
+  // Bảng cũ vẫn đứng yên; chỉ báo trạng thái sau khi người dùng đã ngừng gõ.
   elements.status.textContent = 'Đang tìm...';
-  setSearchProgress(true);
 
-  // Nhường một khung hình để trạng thái và thanh chạy hiện ra rõ ràng.
-  await nextFrame();
+  await wait(SEARCH_SETTLE_MS);
+
+  if (requestId !== searchRequestId) return;
 
   const groupedRows = getFilteredRows();
-  const elapsed = performance.now() - startedAt;
-  const remaining = Math.max(0, MIN_SEARCH_FEEDBACK_MS - elapsed);
-
-  if (remaining > 0) {
-    await wait(remaining);
-  }
-
-  // Bỏ kết quả cũ nếu người dùng đã nhập/chọn thêm trong lúc chờ.
-  if (requestId !== searchRequestId) return;
 
   elements.tableScroll.scrollTop = 0;
   renderRows(groupedRows, {
     showCheck: true,
-    highlightFirstRow: true
+    animateResults: true
   });
-  setSearchProgress(false);
 }
 
 function getFilteredRows() {
@@ -338,25 +325,8 @@ function getFilteredRows() {
   return groupDuplicateItems(filteredRows);
 }
 
-function setSearchProgress(isActive) {
-  if (!elements.searchProgress) return;
-
-  if (isActive) {
-    elements.searchProgress.classList.remove('active');
-    void elements.searchProgress.offsetWidth;
-    elements.searchProgress.classList.add('active');
-    return;
-  }
-
-  elements.searchProgress.classList.remove('active');
-}
-
 function wait(milliseconds) {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
-}
-
-function nextFrame() {
-  return new Promise(resolve => requestAnimationFrame(resolve));
 }
 
 function filterAndRender() {
@@ -432,7 +402,7 @@ function groupDuplicateItems(rows) {
 
 function renderRows(
   rows,
-  { showCheck = false, highlightFirstRow = false } = {}
+  { showCheck = false, animateResults = false } = {}
 ) {
   elements.resultBody.innerHTML = '';
 
@@ -450,10 +420,6 @@ function renderRows(
 
   rows.forEach((rowData, index) => {
     const row = document.createElement('tr');
-
-    if (highlightFirstRow && index === 0) {
-      row.classList.add('result-row-updated');
-    }
 
     appendCell(row, index + 1, 'column-number');
 
@@ -483,7 +449,22 @@ function renderRows(
   });
 
   elements.resultBody.appendChild(fragment);
+
+  if (animateResults) {
+    playResultsEntrance();
+  }
+
   updateTableHeightMode();
+}
+
+function playResultsEntrance() {
+  elements.resultBody.classList.remove('results-entering');
+  void elements.resultBody.offsetWidth;
+  elements.resultBody.classList.add('results-entering');
+
+  window.setTimeout(() => {
+    elements.resultBody.classList.remove('results-entering');
+  }, 280);
 }
 
 function appendCell(row, value, className = '') {
