@@ -1,11 +1,7 @@
 const CSV_URL = './data.csv';
 
 let allRows = [];
-let typingTimer = null;
 let selectedQuickStat = '';
-let searchRequestId = 0;
-
-const SEARCH_SETTLE_MS = 240;
 
 const MACHINE_COLORS = {
   'thi tran xanh': '#2F9E44',
@@ -51,15 +47,9 @@ function attachEvents() {
   elements.resetButton.addEventListener('click', loadData);
 
   elements.itemName.addEventListener('input', () => {
-    clearTimeout(typingTimer);
-    searchRequestId++;
-
-    // Giữ nguyên bảng trong lúc người dùng còn đang gõ.
-    // Chỉ tìm sau khi đã dừng tay một nhịp ngắn để tránh nhấp nháy.
-    typingTimer = setTimeout(() => {
-      syncQuickChips();
-      filterWithFeedback();
-    }, 260);
+    // Cập nhật kết quả ngay theo từng ký tự, không chờ và không tạo hiệu ứng.
+    syncQuickChips();
+    filterAndRender(true);
   });
 
   [
@@ -76,7 +66,7 @@ function attachEvents() {
 
       syncQuickChips();
       syncSelectIcons();
-      filterWithFeedback();
+      filterAndRender(true);
     });
   });
 
@@ -88,7 +78,6 @@ function attachEvents() {
 }
 
 async function loadData() {
-  searchRequestId++;
   showMessage('Đang tải dữ liệu...');
   elements.status.textContent = 'Đang tải dữ liệu...';
 
@@ -227,7 +216,7 @@ function applyQuickFilter(chip) {
 
   syncQuickChips();
   syncSelectIcons();
-  filterWithFeedback();
+  filterAndRender(true);
 }
 
 function findRealOptionValue(selectElement, wantedValue) {
@@ -283,54 +272,12 @@ function syncSelectIcons() {
   });
 }
 
-async function filterWithFeedback() {
-  const requestId = ++searchRequestId;
-
-  // Bảng cũ vẫn đứng yên; chỉ báo trạng thái sau khi người dùng đã ngừng gõ.
-  elements.status.textContent = 'Đang tìm...';
-
-  await wait(SEARCH_SETTLE_MS);
-
-  if (requestId !== searchRequestId) return;
-
+function filterAndRender(showCheck = false) {
   const groupedRows = getFilteredRows();
 
+  // Khi bộ lọc thay đổi, đưa bảng về đầu nhưng không dùng chuyển động.
   elements.tableScroll.scrollTop = 0;
-  renderRows(groupedRows, {
-    showCheck: true,
-    animateResults: true
-  });
-}
-
-function getFilteredRows() {
-  const filters = {
-    itemName: normalize(elements.itemName.value),
-    basicStat: normalize(elements.basicStat.value),
-    upgrade: normalize(elements.upgrade.value),
-    category: normalize(elements.category.value),
-    job: normalize(elements.job.value),
-    machine: normalize(elements.machine.value)
-  };
-
-  const filteredRows = allRows.filter(row =>
-    contains(row[0], filters.itemName) &&
-    exactMatch(row[1], filters.basicStat) &&
-    quickStatMatch(row[1], selectedQuickStat) &&
-    exactMatch(row[2], filters.upgrade) &&
-    exactMatch(row[4], filters.category) &&
-    jobMatch(row[5], filters.job) &&
-    machineMatch(row[6], filters.machine)
-  );
-
-  return groupDuplicateItems(filteredRows);
-}
-
-function wait(milliseconds) {
-  return new Promise(resolve => setTimeout(resolve, milliseconds));
-}
-
-function filterAndRender() {
-  renderRows(getFilteredRows());
+  renderRows(groupedRows, { showCheck });
 }
 
 function quickStatMatch(sourceValue, quickStat) {
@@ -400,10 +347,7 @@ function groupDuplicateItems(rows) {
   ]);
 }
 
-function renderRows(
-  rows,
-  { showCheck = false, animateResults = false } = {}
-) {
+function renderRows(rows, { showCheck = false } = {}) {
   elements.resultBody.innerHTML = '';
 
   const statusPrefix = showCheck ? '✓ ' : '';
@@ -450,21 +394,7 @@ function renderRows(
 
   elements.resultBody.appendChild(fragment);
 
-  if (animateResults) {
-    playResultsEntrance();
-  }
-
   updateTableHeightMode();
-}
-
-function playResultsEntrance() {
-  elements.resultBody.classList.remove('results-entering');
-  void elements.resultBody.offsetWidth;
-  elements.resultBody.classList.add('results-entering');
-
-  window.setTimeout(() => {
-    elements.resultBody.classList.remove('results-entering');
-  }, 280);
 }
 
 function appendCell(row, value, className = '') {
@@ -528,7 +458,7 @@ function toggleMachineFilter(machine) {
 
   syncQuickChips();
   syncSelectIcons();
-  filterWithFeedback();
+  filterAndRender(true);
 }
 
 function getMachineColor(machine) {
@@ -538,8 +468,6 @@ function getMachineColor(machine) {
 }
 
 function resetFilters(renderAfterReset = true) {
-  clearTimeout(typingTimer);
-
   elements.itemName.value = '';
   elements.basicStat.value = '';
   elements.upgrade.value = '';
@@ -553,7 +481,7 @@ function resetFilters(renderAfterReset = true) {
   syncSelectIcons();
 
   if (renderAfterReset) {
-    filterWithFeedback();
+    filterAndRender(true);
   }
 }
 
