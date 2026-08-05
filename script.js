@@ -1,6 +1,7 @@
 const CSV_URL = './data.csv';
 
 let allRows = [];
+let typingTimer = null;
 let selectedQuickStat = '';
 
 const MACHINE_COLORS = {
@@ -47,9 +48,12 @@ function attachEvents() {
   elements.resetButton.addEventListener('click', loadData);
 
   elements.itemName.addEventListener('input', () => {
-    // Cập nhật kết quả ngay theo từng ký tự, không chờ và không tạo hiệu ứng.
-    syncQuickChips();
-    filterAndRender(true);
+    clearTimeout(typingTimer);
+
+    typingTimer = setTimeout(() => {
+      syncQuickChips();
+      filterAndRender();
+    }, 180);
   });
 
   [
@@ -66,7 +70,7 @@ function attachEvents() {
 
       syncQuickChips();
       syncSelectIcons();
-      filterAndRender(true);
+      filterAndRender();
     });
   });
 
@@ -216,7 +220,7 @@ function applyQuickFilter(chip) {
 
   syncQuickChips();
   syncSelectIcons();
-  filterAndRender(true);
+  filterAndRender();
 }
 
 function findRealOptionValue(selectElement, wantedValue) {
@@ -272,12 +276,29 @@ function syncSelectIcons() {
   });
 }
 
-function filterAndRender(showCheck = false) {
-  const groupedRows = getFilteredRows();
+function filterAndRender() {
+  const filters = {
+    itemName: normalize(elements.itemName.value),
+    basicStat: normalize(elements.basicStat.value),
+    upgrade: normalize(elements.upgrade.value),
+    category: normalize(elements.category.value),
+    job: normalize(elements.job.value),
+    machine: normalize(elements.machine.value)
+  };
 
-  // Khi bộ lọc thay đổi, đưa bảng về đầu nhưng không dùng chuyển động.
-  elements.tableScroll.scrollTop = 0;
-  renderRows(groupedRows, { showCheck });
+  const filteredRows = allRows.filter(row =>
+    contains(row[0], filters.itemName) &&
+    exactMatch(row[1], filters.basicStat) &&
+    quickStatMatch(row[1], selectedQuickStat) &&
+    exactMatch(row[2], filters.upgrade) &&
+    exactMatch(row[4], filters.category) &&
+    jobMatch(row[5], filters.job) &&
+    machineMatch(row[6], filters.machine)
+  );
+
+  const groupedRows = groupDuplicateItems(filteredRows);
+
+  renderRows(groupedRows);
 }
 
 function quickStatMatch(sourceValue, quickStat) {
@@ -347,12 +368,11 @@ function groupDuplicateItems(rows) {
   ]);
 }
 
-function renderRows(rows, { showCheck = false } = {}) {
+function renderRows(rows) {
   elements.resultBody.innerHTML = '';
 
-  const statusPrefix = showCheck ? '✓ ' : '';
   elements.status.textContent =
-    `${statusPrefix}${formatNumber(rows.length)} kết quả`;
+    `${formatNumber(rows.length)} kết quả`;
 
   if (rows.length === 0) {
     showMessage('Không có dữ liệu phù hợp');
@@ -393,7 +413,6 @@ function renderRows(rows, { showCheck = false } = {}) {
   });
 
   elements.resultBody.appendChild(fragment);
-
   updateTableHeightMode();
 }
 
@@ -458,7 +477,7 @@ function toggleMachineFilter(machine) {
 
   syncQuickChips();
   syncSelectIcons();
-  filterAndRender(true);
+  filterAndRender();
 }
 
 function getMachineColor(machine) {
@@ -468,6 +487,8 @@ function getMachineColor(machine) {
 }
 
 function resetFilters(renderAfterReset = true) {
+  clearTimeout(typingTimer);
+
   elements.itemName.value = '';
   elements.basicStat.value = '';
   elements.upgrade.value = '';
@@ -481,7 +502,7 @@ function resetFilters(renderAfterReset = true) {
   syncSelectIcons();
 
   if (renderAfterReset) {
-    filterAndRender(true);
+    filterAndRender();
   }
 }
 
