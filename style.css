@@ -2009,9 +2009,3 @@ body::-webkit-scrollbar {
     flex: 0 0 auto !important;
   }
 }
-
-/* Trạng thái kết quả giữ ổn định, không dùng hiệu ứng chuyển động. */
-.result-status {
-  min-width: 112px;
-  text-align: center;
-}
