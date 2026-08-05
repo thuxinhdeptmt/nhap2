@@ -2011,85 +2011,37 @@ body::-webkit-scrollbar {
 }
 
 
+
 /* =========================================================
-   PHẢN HỒI KHI TÌM KIẾM
-   Đang tìm → thanh chạy → cập nhật bảng → nhấn sáng hàng đầu.
+   PHẢN HỒI TÌM KIẾM MƯỢT
+   Không thanh chạy, không nháy sáng, không fade.
+   Kết quả mới trượt nhẹ từ dưới lên sau khi tìm xong.
    ========================================================= */
 
-.table-card {
-  position: relative;
+#resultBody.results-entering {
+  animation: results-slide-in 0.26s cubic-bezier(0.22, 0.78, 0.28, 1) both;
+  transform-origin: top center;
 }
 
-.search-progress {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 5;
-  height: 3px;
-  overflow: hidden;
-  border-radius: 16px 16px 0 0;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.search-progress.active {
-  opacity: 1;
-}
-
-.search-progress-bar {
-  display: block;
-  width: 42%;
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #8fd0b7, #45a982, #f2b84b);
-  transform: translateX(-115%);
-}
-
-.search-progress.active .search-progress-bar {
-  animation: search-progress-run 0.72s ease-in-out infinite;
-}
-
-@keyframes search-progress-run {
+@keyframes results-slide-in {
   from {
-    transform: translateX(-115%);
+    transform: translateY(10px);
   }
 
   to {
-    transform: translateX(340%);
-  }
-}
-
-.result-row-updated td {
-  animation: result-row-pulse 0.72s ease-out both;
-}
-
-@keyframes result-row-pulse {
-  0% {
-    background-color: rgba(120, 196, 167, 0.28);
-    box-shadow: inset 0 2px 0 rgba(47, 143, 111, 0.28),
-                inset 0 -2px 0 rgba(47, 143, 111, 0.20);
-  }
-
-  55% {
-    background-color: rgba(234, 246, 240, 0.92);
-    box-shadow: inset 0 1px 0 rgba(47, 143, 111, 0.12),
-                inset 0 -1px 0 rgba(47, 143, 111, 0.08);
-  }
-
-  100% {
-    background-color: transparent;
-    box-shadow: none;
+    transform: translateY(0);
   }
 }
 
 .result-status {
-  transition: border-color 0.16s ease, background-color 0.16s ease;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .search-progress.active .search-progress-bar,
-  .result-row-updated td {
+  #resultBody.results-entering {
     animation: none;
   }
 }
