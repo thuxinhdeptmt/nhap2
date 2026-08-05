@@ -2010,38 +2010,8 @@ body::-webkit-scrollbar {
   }
 }
 
-
-
-/* =========================================================
-   PHẢN HỒI TÌM KIẾM MƯỢT
-   Không thanh chạy, không nháy sáng, không fade.
-   Kết quả mới trượt nhẹ từ dưới lên sau khi tìm xong.
-   ========================================================= */
-
-#resultBody.results-entering {
-  animation: results-slide-in 0.26s cubic-bezier(0.22, 0.78, 0.28, 1) both;
-  transform-origin: top center;
-}
-
-@keyframes results-slide-in {
-  from {
-    transform: translateY(10px);
-  }
-
-  to {
-    transform: translateY(0);
-  }
-}
-
+/* Trạng thái kết quả giữ ổn định, không dùng hiệu ứng chuyển động. */
 .result-status {
-  transition:
-    border-color 0.18s ease,
-    background-color 0.18s ease,
-    color 0.18s ease;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #resultBody.results-entering {
-    animation: none;
-  }
+  min-width: 112px;
+  text-align: center;
 }
