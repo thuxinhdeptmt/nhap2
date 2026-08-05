@@ -3,6 +3,9 @@ const CSV_URL = './data.csv';
 let allRows = [];
 let typingTimer = null;
 let selectedQuickStat = '';
+let searchRequestId = 0;
+
+const MIN_SEARCH_FEEDBACK_MS = 360;
 
 const MACHINE_COLORS = {
   'thi tran xanh': '#2F9E44',
@@ -34,6 +37,7 @@ const elements = {
   content: document.querySelector('.content'),
   tableCard: document.querySelector('.table-card'),
   tableScroll: document.querySelector('.table-scroll'),
+  searchProgress: document.getElementById('searchProgress'),
 
   quickChips: [...document.querySelectorAll('.quick-chip')]
 };
@@ -49,10 +53,14 @@ function attachEvents() {
 
   elements.itemName.addEventListener('input', () => {
     clearTimeout(typingTimer);
+    searchRequestId++;
+
+    elements.status.textContent = 'Đang tìm...';
+    setSearchProgress(true);
 
     typingTimer = setTimeout(() => {
       syncQuickChips();
-      filterAndRender();
+      filterWithFeedback();
     }, 180);
   });
 
@@ -70,7 +78,7 @@ function attachEvents() {
 
       syncQuickChips();
       syncSelectIcons();
-      filterAndRender();
+      filterWithFeedback();
     });
   });
 
@@ -82,6 +90,8 @@ function attachEvents() {
 }
 
 async function loadData() {
+  searchRequestId++;
+  setSearchProgress(false);
   showMessage('Đang tải dữ liệu...');
   elements.status.textContent = 'Đang tải dữ liệu...';
 
@@ -220,7 +230,7 @@ function applyQuickFilter(chip) {
 
   syncQuickChips();
   syncSelectIcons();
-  filterAndRender();
+  filterWithFeedback();
 }
 
 function findRealOptionValue(selectElement, wantedValue) {
@@ -276,7 +286,36 @@ function syncSelectIcons() {
   });
 }
 
-function filterAndRender() {
+async function filterWithFeedback() {
+  const requestId = ++searchRequestId;
+  const startedAt = performance.now();
+
+  elements.status.textContent = 'Đang tìm...';
+  setSearchProgress(true);
+
+  // Nhường một khung hình để trạng thái và thanh chạy hiện ra rõ ràng.
+  await nextFrame();
+
+  const groupedRows = getFilteredRows();
+  const elapsed = performance.now() - startedAt;
+  const remaining = Math.max(0, MIN_SEARCH_FEEDBACK_MS - elapsed);
+
+  if (remaining > 0) {
+    await wait(remaining);
+  }
+
+  // Bỏ kết quả cũ nếu người dùng đã nhập/chọn thêm trong lúc chờ.
+  if (requestId !== searchRequestId) return;
+
+  elements.tableScroll.scrollTop = 0;
+  renderRows(groupedRows, {
+    showCheck: true,
+    highlightFirstRow: true
+  });
+  setSearchProgress(false);
+}
+
+function getFilteredRows() {
   const filters = {
     itemName: normalize(elements.itemName.value),
     basicStat: normalize(elements.basicStat.value),
@@ -296,9 +335,32 @@ function filterAndRender() {
     machineMatch(row[6], filters.machine)
   );
 
-  const groupedRows = groupDuplicateItems(filteredRows);
+  return groupDuplicateItems(filteredRows);
+}
 
-  renderRows(groupedRows);
+function setSearchProgress(isActive) {
+  if (!elements.searchProgress) return;
+
+  if (isActive) {
+    elements.searchProgress.classList.remove('active');
+    void elements.searchProgress.offsetWidth;
+    elements.searchProgress.classList.add('active');
+    return;
+  }
+
+  elements.searchProgress.classList.remove('active');
+}
+
+function wait(milliseconds) {
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+
+function nextFrame() {
+  return new Promise(resolve => requestAnimationFrame(resolve));
+}
+
+function filterAndRender() {
+  renderRows(getFilteredRows());
 }
 
 function quickStatMatch(sourceValue, quickStat) {
@@ -368,11 +430,15 @@ function groupDuplicateItems(rows) {
   ]);
 }
 
-function renderRows(rows) {
+function renderRows(
+  rows,
+  { showCheck = false, highlightFirstRow = false } = {}
+) {
   elements.resultBody.innerHTML = '';
 
+  const statusPrefix = showCheck ? '✓ ' : '';
   elements.status.textContent =
-    `${formatNumber(rows.length)} kết quả`;
+    `${statusPrefix}${formatNumber(rows.length)} kết quả`;
 
   if (rows.length === 0) {
     showMessage('Không có dữ liệu phù hợp');
@@ -384,6 +450,10 @@ function renderRows(rows) {
 
   rows.forEach((rowData, index) => {
     const row = document.createElement('tr');
+
+    if (highlightFirstRow && index === 0) {
+      row.classList.add('result-row-updated');
+    }
 
     appendCell(row, index + 1, 'column-number');
 
@@ -477,7 +547,7 @@ function toggleMachineFilter(machine) {
 
   syncQuickChips();
   syncSelectIcons();
-  filterAndRender();
+  filterWithFeedback();
 }
 
 function getMachineColor(machine) {
@@ -502,7 +572,7 @@ function resetFilters(renderAfterReset = true) {
   syncSelectIcons();
 
   if (renderAfterReset) {
-    filterAndRender();
+    filterWithFeedback();
   }
 }
 
